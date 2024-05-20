@@ -7,8 +7,8 @@
     </template>
     <div class="flex justify-end pb-3 gap-3">
       <template v-if="isDrop">
-        <a-button type="primary" @click="isDrop = !isDrop">{{ $t("cancel") }}</a-button>
-        <a-button type="text" @click="saveSequence">{{ $t("save") }}</a-button>
+        <a-button type="primary" @click="reloadArticles">{{ $t("cancel") }}</a-button>
+        <a-button type="primary" @click="saveSequence">{{ $t("save") }}</a-button>
       </template>
       <template v-else>
         <a-button type="primary" @click="isDrop = !isDrop">{{
@@ -67,6 +67,8 @@
           </table>
           <div class="text-right p-3 px-6">
             <a-pagination
+              show-size-changer
+              @change="onPageChange"
               v-model:current="articles.current_page"
               :total="articles.total"
               v-model:page-size="articles.per_page"
@@ -361,6 +363,14 @@ export default {
     //     }
     // });
     //},
+    reloadArticles() {
+      this.$inertia.reload({
+        only: ["articles"],
+        onSuccess: (page) => {
+          this.isDrop = false;
+        },
+      });
+    },
     saveSequence() {
       this.$inertia.post(route("manage.article.sequence"), this.articles.data, {
         onSuccess: (page) => {
@@ -379,6 +389,12 @@ export default {
       editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
         return new UploadAdapter(loader);
       };
+    },
+    onPageChange(page, pageSize) {
+      this.$inertia.get(route("manage.articles.index"), {
+        currentPage: page,
+        pageSize: pageSize,
+      });
     },
   },
 };

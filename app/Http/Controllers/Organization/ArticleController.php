@@ -21,10 +21,13 @@ class ArticleController extends Controller
     public function index(Request $request)
     {
         //dd(session('member'));
+        // dd($request->page);
+        $pageSize = $request->pageSize ?? 10;
+        $currentPage = $request->currentPage ?? 1;
         return Inertia::render('Organization/Articles', [
             'classifies' => Classify::whereBelongsTo(session('organization'))->get(),
             'articleCategories' => Config::item('article_categories'),
-            'articles' => Article::whereBelongsTo(session('organization'))->orderBy('sequence','asc')->paginate($request->per_page)
+            'articles' => Article::whereBelongsTo(session('organization'))->orderBy('sequence', 'asc')->paginate($pageSize, ['*'], 'page', $currentPage)
         ]);
     }
 
