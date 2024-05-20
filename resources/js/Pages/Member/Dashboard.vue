@@ -20,28 +20,32 @@ export default {
         {
           image: "/features/0_news_events.png",
           title_zh: "新聞與活動",
-          content_zh: "新聞部分是用來發布組織的最新消息和事件，向公眾展示其在社會和環境領域中所做的工作，並提高對其使命的認識和理解。",
+          content_zh:
+            "新聞部分是用來發布組織的最新消息和事件，向公眾展示其在社會和環境領域中所做的工作，並提高對其使命的認識和理解。",
           tags: ["#通告"],
           link: "/",
         },
         {
           image: "/features/0_form_application.png",
           title_zh: "表格及報名",
-          content_zh: "包括各種類型的表格和報名表，方便訪問者提交相關資訊並表達他們的參與意願。",
+          content_zh:
+            "包括各種類型的表格和報名表，方便訪問者提交相關資訊並表達他們的參與意願。",
           tags: ["#報名"],
           link: "forms",
         },
         {
           image: "/features/0_learn_share.png",
           title_zh: "學習興分享",
-          content_zh: "提供教育資源、知識分享和學習機會的區域。提供有價值的學習內容，並促進知識交流和社群互動。",
+          content_zh:
+            "提供教育資源、知識分享和學習機會的區域。提供有價值的學習內容，並促進知識交流和社群互動。",
           tags: ["#學習", "#分享"],
           link: "#",
         },
         {
           image: "/features/0_community.png",
           title_zh: "虛擬社區",
-          content_zh: "交流和參與組織活動的線上平台。讓志願者、支持者和參與者能夠連結起來，分享資源、經驗和想法。",
+          content_zh:
+            "交流和參與組織活動的線上平台。讓志願者、支持者和參與者能夠連結起來，分享資源、經驗和想法。",
           tags: ["#學習", "#交流"],
         },
       ],
@@ -68,18 +72,18 @@ export default {
         },
       ],
       showQrcode: false,
-      qrcodeLogo:'/images/site_logo.png'
+      qrcodeLogo: "/images/site_logo.png",
     };
   },
   created() {
-    this.member = this.members[0]
-    if(this.cardStyle.logo){
-      this.qrcodeLogo='/images/'+this.cardStyle.logo
-    }else if(this.$page.props.currentMember.organization.logo){
-      this.qrcodeLogo=this.$page.props.currentMember.organization.logo
+    this.member = this.members[0];
+    if (this.cardStyle.logo) {
+      this.qrcodeLogo = "/images/" + this.cardStyle.logo;
+    } else if (this.$page.props.currentMember.organization.logo) {
+      this.qrcodeLogo = this.$page.props.currentMember.organization.logo;
     }
   },
-  mounted() { },
+  mounted() {},
   methods: {
     getQrcode() {
       axios.get(route("member.getQrcode")).then((response) => {
@@ -99,9 +103,8 @@ export default {
     },
     switchOrganization(member) {
       console.log(member);
-      this.$inertia.post(route('member.membership.switch', { member: member.id }))
-    }
-
+      this.$inertia.post(route("member.membership.switch", { member: member.id }));
+    },
   },
 };
 </script>
@@ -110,7 +113,7 @@ export default {
   <MemberLayout title="Dashboard">
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ $t('membership') }}
+        {{ $t("membership") }}
       </h2>
     </template>
     <div class="container mx-auto">
@@ -123,12 +126,20 @@ export default {
                 <a :href="feature.link">
                   <div class="gutter-row">
                     <div class="max-w rounded overflow-hidden shadow-lg">
-                      <img class="w-full" alt="Use any sample image here..." :src="feature.thumbnail">
+                      <img
+                        class="w-full"
+                        alt="Use any sample image here..."
+                        :src="feature.thumbnail"
+                      />
                       <div class="px-2 py-4 xs:h-64 lg:h-48">
                         <inertia-link v-if="feature.url" :href="feature.url">
                           <div class="font-bold text-xl mb-2">{{ feature.title }}</div>
                         </inertia-link>
-                        <inertia-link v-else :href="route('article.item', { t: feature.uuid })" target="_blank">
+                        <inertia-link
+                          v-else
+                          :href="route('article.item', { t: feature.uuid })"
+                          target="_blank"
+                        >
                           <div class="font-bold text-xl mb-2">{{ feature.title }}</div>
                         </inertia-link>
                         <p class="text-gray-700 text-base pl-1">
@@ -136,8 +147,11 @@ export default {
                         </p>
                       </div>
                       <div class="px-6 py-4">
-                        <span v-for="tag in feature.tags"
-                          class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">{{ tag }}</span>
+                        <span
+                          v-for="tag in feature.tags"
+                          class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+                          >{{ tag }}</span
+                        >
                       </div>
                     </div>
                   </div>
@@ -149,7 +163,9 @@ export default {
 
           <ol class="list-disc">
             <li v-for="form in forms">
-              <inertia-link :href="route('forms.show', form.id)">{{ form.title }}</inertia-link>
+              <inertia-link :href="route('forms.show', form.id)">{{
+                form.title
+              }}</inertia-link>
             </li>
           </ol>
 
@@ -168,43 +184,64 @@ export default {
               <!-- QRcode -->
               <div class="flex flex-col justify-center items-center" v-if="showQrcode">
                 <div>
-                  <QRCodeVue3 :key="qrcode" v-bind:value="qrcode" :image="qrcodeLogo" :dotsOptions="{
-          type: 'dots',
-          color: '#26249a',
-          gradient: {
-            type: 'linear',
-            rotation: 0,
-            colorStops: [
-              { offset: 0, color: '#26249a' },
-              { offset: 1, color: '#26249a' },
-            ],
-          },
-        }" :cornersSquareOptions="{
-          type: 'square',
-          color: '#e00404'
-        }" :cornersDotOptions="{
-          color: '#e00404'
-        }" />
+                  <QRCodeVue3
+                    :key="qrcode"
+                    v-bind:value="qrcode"
+                    :image="qrcodeLogo"
+                    :dotsOptions="{
+                      type: 'dots',
+                      color: '#26249a',
+                      gradient: {
+                        type: 'linear',
+                        rotation: 0,
+                        colorStops: [
+                          { offset: 0, color: '#26249a' },
+                          { offset: 1, color: '#26249a' },
+                        ],
+                      },
+                    }"
+                    :cornersSquareOptions="{
+                      type: 'square',
+                      color: '#e00404',
+                    }"
+                    :cornersDotOptions="{
+                      color: '#e00404',
+                    }"
+                  />
                 </div>
               </div>
               <!-- card start -->
-              <div class="mx-auto relative py-4 w-96 hover:scale-105 transform transition-transform mb-4">
-                <div :style="cardStyle['font_style']"
+              <div
+                class="mx-auto relative py-4 w-96 hover:scale-105 transform transition-transform mb-4"
+              >
+                <div
+                  :style="cardStyle['font_style']"
                   class="absolute z-50 h-52 flex rounded-lg flex-col py-3 px-8 shadow-xl text-sm w-full"
-                  @click="onShowQrcode">
+                  @click="onShowQrcode"
+                >
                   <div class="flex flex-col w-xl">
                     <div class="flex justify-center">
-                      <div class="text-lg font-bold">{{ currentMember.organization['name_' + $t('lang')] }}</div>
+                      <div class="text-lg font-bold">
+                        {{ currentMember.organization["name_" + $t("lang")] }}
+                      </div>
                     </div>
                     <div class="flex">
                       <div class="flex flex-col flex-auto gap-1">
                         <div class="">姓名：</div>
-                        <div class="mb-2">{{ currentMember.family_name }}{{ currentMember.given_name }}</div>
+                        <div class="mb-2">
+                          {{ currentMember.family_name }}{{ currentMember.given_name }}
+                        </div>
                         <div class="">會員編號：</div>
-                        <div class="font-sans mb-2">{{ currentMember.member_number }}</div>
+                        <div class="font-sans mb-2">
+                          {{ currentMember.member_number }}
+                        </div>
                       </div>
                       <div class="flex text-right">
-                        <img v-if="currentMember.avatar" class="w-20 h-20" :src="currentMember.avatar" />
+                        <img
+                          v-if="currentMember.avatar"
+                          class="w-20 h-20"
+                          :src="currentMember.avatar"
+                        />
                         <img v-else class="w-20 h-20" src="/avatars/dummy-avatar.jpg" />
                       </div>
                     </div>
@@ -216,12 +253,16 @@ export default {
                     </div>
                     <div class="flex flex-col gap-1 flex-auto">
                       <div class="">有效日期：</div>
-                      <div class="font-sans text-base">{{ currentMember.expired_at }}</div>
+                      <div class="font-sans text-base">
+                        {{ currentMember.expired_at }}
+                      </div>
                     </div>
                   </div>
                 </div>
-                <img class="relative object-cover w-96 h-52 rounded-lg z-0"
-                  :src="'/images/' + cardStyle['background']" />
+                <img
+                  class="relative object-cover w-96 h-52 rounded-lg z-0"
+                  :src="'/images/' + cardStyle['background']"
+                />
               </div>
               <!-- card end -->
 
@@ -233,66 +274,107 @@ export default {
                   {{ currentMember.family_name }}{{ currentMember.given_name }}
                 </h1>
                 <p class="text-center text-sm text-gray-400 font-medium">
-                  {{ currentMember.organization['name_' + $t('lang')] }}
+                  {{ currentMember.organization["name_" + $t("lang")] }}
                 </p>
                 <p>
                   <span> </span>
                 </p>
                 <div class="my-5 px-6">
-                  <a href="#"
-                    class="text-gray-200 block rounded-lg text-center font-medium leading-6 px-6 py-3 bg-gray-900 hover:bg-black hover:text-white">Connect
-                    with <span class="font-bold">{{ currentMember.email }}</span></a>
+                  <a
+                    href="#"
+                    class="text-gray-200 block rounded-lg text-center font-medium leading-6 px-6 py-3 bg-gray-900 hover:bg-black hover:text-white"
+                    >Connect with
+                    <span class="font-bold">{{ currentMember.email }}</span></a
+                  >
                 </div>
                 <div class="flex justify-between items-center my-5 px-6">
-                  <a href=""
-                    class="text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded transition duration-150 ease-in font-medium text-sm text-center w-full py-3">Facebook</a>
-                  <a href=""
-                    class="text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded transition duration-150 ease-in font-medium text-sm text-center w-full py-3">Twitter</a>
-                  <a href=""
-                    class="text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded transition duration-150 ease-in font-medium text-sm text-center w-full py-3">Instagram</a>
-                  <a href=""
-                    class="text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded transition duration-150 ease-in font-medium text-sm text-center w-full py-3">Email</a>
+                  <a
+                    href=""
+                    class="text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded transition duration-150 ease-in font-medium text-sm text-center w-full py-3"
+                    >Facebook</a
+                  >
+                  <a
+                    href=""
+                    class="text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded transition duration-150 ease-in font-medium text-sm text-center w-full py-3"
+                    >Twitter</a
+                  >
+                  <a
+                    href=""
+                    class="text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded transition duration-150 ease-in font-medium text-sm text-center w-full py-3"
+                    >Instagram</a
+                  >
+                  <a
+                    href=""
+                    class="text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded transition duration-150 ease-in font-medium text-sm text-center w-full py-3"
+                    >Email</a
+                  >
                 </div>
                 <div class="w-full">
                   <div v-if="members.length > 1">
-                    <h3 class="font-medium text-gray-900 text-left px-6">Your Organizations</h3>
-                    <div class="mt-5 w-full flex flex-col items-center overflow-hidden text-sm">
-
+                    <h3 class="font-medium text-gray-900 text-left px-6">
+                      Your Organizations
+                    </h3>
+                    <div
+                      class="mt-5 w-full flex flex-col items-center overflow-hidden text-sm"
+                    >
                       <template v-for="member in members">
-                        <a href="#"
-                          class="w-full border-t bor  der-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">
-                          <img src="https://avatars0.githubusercontent.com/u/35900628?v=4" alt=""
-                            class="rounded-full h-6 shadow-md inline-block mr-2" />
-                          {{ member.organization.abbr }} - {{ member.organization['name_' + $t('lang')] }}
-                          <span class="text-gray-500 text-xs float-right pr-2" v-if="members.length > 1">
-                            <a @click="switchOrganization(member)">{{ $t('organization_switch') }}</a>
+                        <a
+                          href="#"
+                          class="w-full border-t bor der-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150"
+                        >
+                          <img
+                            src="https://avatars0.githubusercontent.com/u/35900628?v=4"
+                            alt=""
+                            class="rounded-full h-6 shadow-md inline-block mr-2"
+                          />
+                          {{ member.organization.abbr }} -
+                          {{ member.organization["name_" + $t("lang")] }}
+                          <span
+                            class="text-gray-500 text-xs float-right pr-2"
+                            v-if="members.length > 1"
+                          >
+                            <a @click="switchOrganization(member)">{{
+                              $t("organization_switch")
+                            }}</a>
                           </span>
-
                         </a>
                       </template>
                     </div>
                   </div>
 
                   <h3 class="font-medium text-gray-900 text-left px-6">Recent updates</h3>
-                  <div class="mt-5 w-full flex flex-col items-center overflow-hidden text-sm">
-
+                  <div
+                    class="mt-5 w-full flex flex-col items-center overflow-hidden text-sm"
+                  >
                     <template v-for="organization in currentMember.organizations">
-                      <a href="#"
-                        class="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">
-                        <img src="https://avatars0.githubusercontent.com/u/35900628?v=4" alt=""
-                          class="rounded-full h-6 shadow-md inline-block mr-2" />
+                      <a
+                        href="#"
+                        class="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150"
+                      >
+                        <img
+                          src="https://avatars0.githubusercontent.com/u/35900628?v=4"
+                          alt=""
+                          class="rounded-full h-6 shadow-md inline-block mr-2"
+                        />
                         {{ organization.abbr }} - {{ organization.full_name }}
                         <span class="text-gray-500 text-xs">24 min ago</span>
                       </a>
                     </template>
 
                     <template v-for="portfolio in currentMember.portfolios">
-                      <a href="#"
-                        class="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">
-                        <img src="https://avatars0.githubusercontent.com/u/35900628?v=4" alt=""
-                          class="rounded-full h-6 shadow-md inline-block mr-2" />
+                      <a
+                        href="#"
+                        class="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150"
+                      >
+                        <img
+                          src="https://avatars0.githubusercontent.com/u/35900628?v=4"
+                          alt=""
+                          class="rounded-full h-6 shadow-md inline-block mr-2"
+                        />
                         {{ portfolio.title }} - {{ portfolio.description }}
-                        <span class="text-gray-500 text-xs">{{ portfolio.start_date }}</span>
+                        <span class="text-gray-500 text-xs">{{
+                          portfolio.start_date
+                        }}</span>
                       </a>
                     </template>
                   </div>
@@ -303,7 +385,6 @@ export default {
         </div>
       </div>
     </div>
-
   </MemberLayout>
 </template>
 

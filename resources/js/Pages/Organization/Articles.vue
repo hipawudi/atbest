@@ -5,88 +5,78 @@
         {{ $t("articles") }}
       </h2>
     </template>
-      <div class="flex-auto pb-3 text-right pb-3">
+    <div class="flex justify-end pb-3 gap-3">
+      <template v-if="isDrop">
+        <a-button type="primary" @click="isDrop = !isDrop">{{ $t("cancel") }}</a-button>
+        <a-button type="text" @click="saveSequence">{{ $t("save") }}</a-button>
+      </template>
+      <template v-else>
+        <a-button type="primary" @click="isDrop = !isDrop">{{
+          $t("dragger_sort")
+        }}</a-button>
         <inertia-link
           :href="route('manage.articles.create')"
           class="ant-btn ant-btn-primary"
           >{{ $t("create_article") }}</inertia-link
         >
-      </div>
-      <div class="bg-white relative shadow rounded-lg overflow-x-auto">
-       
-
-        <div class="ant-table">
-            <div class="ant-table-container">
-              <table style="table-layout: auto">
-                <thead class="ant-table-thead">
-                  <tr>
-                    <th v-for="column in columns">{{ $t(column.i18n) }}</th>
-                  </tr>
-                </thead>
-                <draggable
-                  tag="tbody"
-                  class="dragArea list-group ant-table-tbody"
-                  :list="articles.data"
-                  @change="rowChange"
-                >
-                  <transition-group v-for="(record, idx) in articles.data">
-                    <tr class="ant-table-row ant-table-row-level-0" :key="record.id">
-                      <td v-for="column in columns" class="ant-table-cell">
-                        <template v-if="column.dataIndex=='operation'">
-                          <a-button @click="editRecord(record)">{{ $t("edit") }}</a-button>
-                        </template>
-                        <template v-else-if="column.dataIndex=='dragger'">
-                          <holder-outlined />
-                          {{record.id}} - {{ record.sequence }}
-                        </template>
-                        <template v-else-if="column.dataIndex == 'published'">
-                          {{ record.published ? $t("yes") : $t("no") }}
-                        </template>
-                        <template v-else>
-                          {{ record[column.dataIndex] }}
-                        </template>
-                      </td>
-                    </tr>
-                  </transition-group>
-                </draggable>
-              </table>
-            </div>
+      </template>
+    </div>
+    <div class="bg-white relative shadow rounded-lg">
+      <div class="ant-table">
+        <div class="ant-table-container">
+          <table style="table-layout: auto">
+            <thead class="ant-table-thead">
+              <tr>
+                <th v-for="column in columns" :key="column.id">{{ $t(column.i18n) }}</th>
+              </tr>
+            </thead>
+            <draggable
+              tag="tbody"
+              class="dragArea list-group ant-table-tbody"
+              :list="articles.data"
+              :disabled="!isDrop"
+              @change="onDragEnd"
+            >
+              <transition-group v-for="(record, idx) in articles.data" :key="idx">
+                <tr class="ant-table-row ant-table-row-level-0" :key="record.id">
+                  <td
+                    v-for="column in columns"
+                    class="ant-table-cell"
+                    :class="isDrop ? 'cursor-grab' : ''"
+                    :key="column.id"
+                  >
+                    <template v-if="column.dataIndex == 'operation'">
+                      <a-button @click="editRecord(record)">{{ $t("edit") }}</a-button>
+                    </template>
+                    <template v-else-if="column.dataIndex == 'dragger'">
+                      <div class="flex items-center">
+                        <template v-if="isDrop == true"><holder-outlined /></template>
+                        {{ record.sequence }}
+                      </div>
+                    </template>
+                    <template v-else-if="column.dataIndex == 'published'">
+                      {{ record.published ? $t("yes") : $t("no") }}
+                    </template>
+                    <template v-else>
+                      {{ record[column.dataIndex] }}
+                    </template>
+                  </td>
+                </tr>
+              </transition-group>
+            </draggable>
+          </table>
+          <div class="text-right p-3 px-6">
+            <a-pagination
+              v-model:current="articles.current_page"
+              :total="articles.total"
+              v-model:page-size="articles.per_page"
+            />
           </div>
-
-
-
-        <a-table :dataSource="articles.data" :columns="columns" :pagination="pagination" @change="onPaginationChange">
-          <template #headerCell="{ column }">
-            {{ column.i18n ? $t(column.i18n) : column.title }}
-          </template>
-          <template #bodyCell="{ column, text, record, index }">
-            <template v-if="column.dataIndex == 'operation'">
-              <inertia-link
-                :href="route('manage.articles.edit', record.id)"
-                class="ant-btn"
-                >{{ $t("edit") }}</inertia-link
-              >
-              <a-popconfirm
-                :title="$t('confirm_delete_record')"
-                :ok-text="$t('yes')"
-                :cancel-text="$t('no')"
-                @confirm="deleteConfirmed(record)"
-                :disabled="record.published == 1"
-              >
-                <a-button :disabled="record.published == 1">{{ $t("delete") }}</a-button>
-              </a-popconfirm>
-            </template>
-            <template v-else-if="column.dataIndex == 'published'">
-              {{ record.published ? $t("yes") : $t("no") }}
-            </template>
-            <template v-else>
-              {{ record[column.dataIndex] }}
-            </template>
-          </template>
-        </a-table>
+        </div>
       </div>
-      <p>Article CAN NOT be delete if published.</p>
-    
+    </div>
+    <p>Article CAN NOT be delete if published.</p>
+
     <!-- Modal Start-->
     <a-modal v-model:visible="modal.isOpen" :title="modal.title" width="100%">
       <a-form
@@ -181,7 +171,7 @@ import CKEditor from "@ckeditor/ckeditor5-vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import UploadAdapter from "@/Components/ImageUploadAdapter.vue";
 import { VueDraggableNext } from "vue-draggable-next";
-import { HolderOutlined } from '@ant-design/icons-vue';
+import { HolderOutlined } from "@ant-design/icons-vue";
 
 export default {
   components: {
@@ -189,13 +179,14 @@ export default {
     ckeditor: CKEditor.component,
     UploadAdapter,
     draggable: VueDraggableNext,
-    HolderOutlined
+    HolderOutlined,
     //UploadAdapter
   },
   props: ["classifies", "articleCategories", "articles"],
   data() {
     return {
       dateFormat: "YYYY-MM-DD",
+      isDrop: false,
       modal: {
         isOpen: false,
         data: { content_en: "" },
@@ -224,27 +215,33 @@ export default {
           title: "Dragger",
           i18n: "dragger_sort",
           dataIndex: "dragger",
-        },{
+        },
+        {
           title: "Category",
           i18n: "category",
           dataIndex: "category_code",
-        },{
+        },
+        {
           title: "Title",
           i18n: "title",
           dataIndex: "title",
-        },{
+        },
+        {
           title: "Validated at",
           i18n: "valid_at",
           dataIndex: "valid_at",
-        },{
+        },
+        {
           title: "Expired at",
           i18n: "expired_at",
           dataIndex: "expired_at",
-        },{
+        },
+        {
           title: "Published",
           i18n: "published",
           dataIndex: "published",
-        },{
+        },
+        {
           title: "Operation",
           i18n: "operation",
           dataIndex: "operation",
@@ -282,34 +279,11 @@ export default {
         per_page: page.pageSize,
       });
     },
-    rowChange(event) {
+    onDragEnd(event) {
       //未知點做
-      console.log(event.moved)
-      const startSequence=this.articles.data[0].sequence
-      if((event.moved.oldIndex-event.moved.newIndex)>0){
-        console.log('move up');
-      }else{
-        const step=event.moved.newIndex-event.moved.oldIndex
-        // var from=this.article.data[event.moved.oldIndex];
-        console.log('move down')
-        console.log(step);
-        //本來想一個個swarp, 但應該要用recursive
-        for(let i=0; i<step; i++){
-          let idx=event.moved.oldIndex+i
-          let seq=this.articles.data[idx].sequence
-          this.articles.data[idx].sequence=this.articles.data[idx+1].sequence
-          this.articles.data[idx+1].sequence=seq
-        }
-      }
-      console.log(this.articles.data)
-      // this.$inertia.post(route("manage.article.sequence"), data, {
-      //   onSuccess: (page) => {
-      //     console.log(page);
-      //   },
-      //   onError: (error) => {
-      //     console.log(error);
-      //   },
-      // });
+      this.articles.data.forEach((element, idx) => {
+        element.sequence = idx + 1;
+      });
     },
     createRecord() {
       this.modal.data = {};
@@ -387,6 +361,17 @@ export default {
     //     }
     // });
     //},
+    saveSequence() {
+      this.$inertia.post(route("manage.article.sequence"), this.articles.data, {
+        onSuccess: (page) => {
+          console.log(page);
+          this.isDrop = false;
+        },
+        onError: (error) => {
+          console.log(error);
+        },
+      });
+    },
     createLogin(recordId) {
       console.log("create login" + recordId);
     },
