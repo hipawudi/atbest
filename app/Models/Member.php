@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Storage;
 class Member extends Model
 {
     use HasFactory;
-    protected $fillable=[
+    protected $fillable = [
         'user_id',
         'organization_id',
         'given_name',
@@ -34,14 +34,16 @@ class Member extends Model
         'avatar'
     ];
 
-    protected $appends=['avatar_url','member_number'];
+    protected $appends = ['avatar_url', 'member_number'];
 
-    public function getAvatarUrlAttribute(){
-        return $this->avatar?Storage::url($this->avatar):'';
+    public function getAvatarUrlAttribute()
+    {
+        return $this->avatar ? Storage::url($this->avatar) : '';
     }
-    
-    public function getMemberNumberAttribute(){
-        return substr('000000'.$this->id,-5);
+
+    public function getMemberNumberAttribute()
+    {
+        return substr('000000' . $this->id, -5);
     }
     public function createUser(): User
     {
@@ -50,7 +52,7 @@ class Member extends Model
         $user->name = $this->given_name;
         $user->password = 'need-to-set';
         $user->save();
-        $this->user_id=$user->id;
+        $this->user_id = $user->id;
         $this->save();
         return $user;
     }
@@ -60,8 +62,9 @@ class Member extends Model
         return $this->belongsTo(User::class)->with('roles');
     }
 
-    public function ownedBy($organization=null){
-        return $this->organization_id==$organization->id;
+    public function ownedBy($organization = null)
+    {
+        return $this->organization_id == $organization->id;
         //return in_array($organization->id,$this->organizations()->get()->pluck('id')->toArray());
     }
 
@@ -73,19 +76,32 @@ class Member extends Model
     // public function organizations(){
     //     return $this->belongsToMany(Organization::class);
     // }
-    public function organization(){
+    public function organization()
+    {
         return $this->belongsTo(Organization::class);
     }
 
-    public function belongsToOrganization($organization){
+    public function belongsToOrganization($organization)
+    {
         return $this->belongsToMany(Organization::class)->wherePivot('organization_id', $organization->id);
     }
-    public function portfolios(){
+    public function portfolios()
+    {
         return $this->hasMany(Portfolio::class);
     }
-    public function certificates(){
+    public function certificates()
+    {
         return $this->belongsToMany(Certificate::class)->withPivot(
-            'id','display_name','number','number_display','issue_date','valid_from','valid_until','authorize_by','rank','avatar');
+            'id',
+            'display_name',
+            'number',
+            'number_display',
+            'issue_date',
+            'valid_from',
+            'valid_until',
+            'authorize_by',
+            'rank',
+            'avatar'
+        );
     }
-
 }

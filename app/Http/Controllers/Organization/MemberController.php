@@ -28,11 +28,10 @@ class MemberController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Organization/Members',[
+        return Inertia::render('Organization/Members', [
             //'members'=>session('organization')->members
-            'members'=>Organization::find(session('organization')->id)->members
+            'members' => Organization::find(session('organization')->id)->members
         ]);
-
     }
 
     /**
@@ -53,9 +52,9 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-        $data=$request->all();
-        $data['organization_id']=session('organization')->id;
-        $member= Member::create($data);
+        $data = $request->all();
+        $data['organization_id'] = session('organization')->id;
+        $member = Member::create($data);
         //$member->organization()->attach(session('organization')->id);
         return redirect()->back();
     }
@@ -68,8 +67,8 @@ class MemberController extends Controller
      */
     public function show(Member $member)
     {
-        return Inertia::render('Organization/Member',[
-            'member'=>$member,
+        return Inertia::render('Organization/Member', [
+            'member' => $member,
         ]);
     }
 
@@ -108,32 +107,35 @@ class MemberController extends Controller
      */
     public function destroy(Member $member)
     {
-        if($member->ownedBy(session('organization'))){
+        dd(session('organization'));
+        if ($member->ownedBy(session('organization'))) {
             $member->organizations()->detach();
             $member->delete();
         }
         return redirect()->back();
     }
 
-    public function createLogin(Member $member){
-        $this->authorize('update',$member);
+    public function createLogin(Member $member)
+    {
+        $this->authorize('update', $member);
         if (empty($member->user)) {
-            $user=User::where('email',$member->email);
-            if($user){
-                return response()->json(['result'=>false,'message'=>'Email already in used!']);
-            }else{
+            $user = User::where('email', $member->email);
+            if ($user) {
+                return response()->json(['result' => false, 'message' => 'Email already in used!']);
+            } else {
                 $user = $member->createUser();
             }
         } else {
-            return response()->json(['result'=>false,'message'=>'Login Account already created!']);
+            return response()->json(['result' => false, 'message' => 'Login Account already created!']);
             $user = $member->user;
         }
         Password::broker(config('fortify.passwords'))->sendResetLink(
-            [ 'email' => $user->email ]
+            ['email' => $user->email]
         );
-        return response()->json(['result'=>true,'message'=>'Login account created, please check you email.']);
+        return response()->json(['result' => true, 'message' => 'Login account created, please check you email.']);
     }
-    public function export(){
+    public function export()
+    {
         return Excel::download(new MemberExport, 'member.xlsx');
     }
 }

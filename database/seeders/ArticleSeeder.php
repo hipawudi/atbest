@@ -17,14 +17,14 @@ class ArticleSeeder extends Seeder
     public function run()
     {
         $data=[
-            ['organization_id'=>0,'uuid'=>'1','category_code'=>'FEATURE','title'=>'新聞與活動','intro'=>'新聞部分是用來發布組織的最新消息和事件，向公眾展示其在社會和環境領域中所做的工作，並提高對其使命的認識和理解。 ','tags'=>'["通告"]','url'=>'/','thumbnail'=>'/features/1_news_events.png','user_id'=>1,'public'=>0,'published'=>0],
-            ['organization_id'=>0,'uuid'=>'2','category_code'=>'FEATURE','title'=>'表格及報名','intro'=>'包括各種類型的表格和報名表，方便訪問者提交相關資訊並表達他們的參與意願。','tags'=>'["報名"]','url'=>'/forms','thumbnail'=>'/features/2_form_application.png','user_id'=>1,'public'=>0,'published'=>0],
-            ['organization_id'=>0,'uuid'=>'3','category_code'=>'FEATURE','title'=>'學習興分享','intro'=>'提供教育資源、知識分享和學習機會的區域。提供有價值的學習內容，並促進知識交流和社群互動。','tags'=>'["學習","分享"]','url'=>'#','thumbnail'=>'/features/3_learn_share.png','user_id'=>1,'public'=>0,'published'=>0],
-            ['organization_id'=>0,'uuid'=>'4','category_code'=>'FEATURE','title'=>'虛擬社區','intro'=>'交流和參與組織活動的線上平台。讓志願者、支持者和參與者能夠連結起來，分享資源、經驗和想法。','tags'=>'["學習","交流"]','url'=>'#','thumbnail'=>'/features/4_community.png','user_id'=>1,'public'=>0,'published'=>0],
-            ['organization_id'=>11,'uuid'=>'11111111','category_code'=>'FEATURE','title'=>'新聞與活動','intro'=>'新聞部分是用來發布組織的最新消息和事件，向公眾展示其在社會和環境領域中所做的工作，並提高對其使命的認識和理解。 ','tags'=>'["通告"]','url'=>'/','thumbnail'=>'/features/1_news_events.png','user_id'=>1,'public'=>0,'published'=>1],
-            ['organization_id'=>11,'uuid'=>'22222222','category_code'=>'FEATURE','title'=>'表格及報名','intro'=>'包括各種類型的表格和報名表，方便訪問者提交相關資訊並表達他們的參與意願。','tags'=>'["報名"]','url'=>'/forms','thumbnail'=>'/features/2_form_application.png','user_id'=>1,'public'=>0,'published'=>1],
-            ['organization_id'=>11,'uuid'=>'33333333','category_code'=>'FEATURE','title'=>'學習興分享','intro'=>'提供教育資源、知識分享和學習機會的區域。提供有價值的學習內容，並促進知識交流和社群互動。','tags'=>'["學習","分享"]','url'=>'#','thumbnail'=>'/features/3_learn_share.png','user_id'=>1,'public'=>0,'published'=>1],
-            ['organization_id'=>11,'uuid'=>'44444444','category_code'=>'FEATURE','title'=>'虛擬社區','intro'=>'交流和參與組織活動的線上平台。讓志願者、支持者和參與者能夠連結起來，分享資源、經驗和想法。','tags'=>'["學習","交流"]','url'=>'#','thumbnail'=>'/features/4_community.png','user_id'=>1,'public'=>0,'published'=>1],
+            ['organization_id'=>0,'uuid'=>'1','category_code'=>'FEATURE','title'=>'新聞與活動','intro'=>'新聞部分是用來發布組織的最新消息和事件，向公眾展示其在社會和環境領域中所做的工作，並提高對其使命的認識和理解。 ','tags'=>'["通告"]','url'=>'/','thumbnail'=>'/features/1_news_events.png','user_id'=>1,'public'=>0,'published'=>0,'sequence'=>0],
+            ['organization_id'=>0,'uuid'=>'2','category_code'=>'FEATURE','title'=>'表格及報名','intro'=>'包括各種類型的表格和報名表，方便訪問者提交相關資訊並表達他們的參與意願。','tags'=>'["報名"]','url'=>'/forms','thumbnail'=>'/features/2_form_application.png','user_id'=>1,'public'=>0,'published'=>0,'sequence'=>0],
+            ['organization_id'=>0,'uuid'=>'3','category_code'=>'FEATURE','title'=>'學習興分享','intro'=>'提供教育資源、知識分享和學習機會的區域。提供有價值的學習內容，並促進知識交流和社群互動。','tags'=>'["學習","分享"]','url'=>'#','thumbnail'=>'/features/3_learn_share.png','user_id'=>1,'public'=>0,'published'=>0,'sequence'=>0],
+            ['organization_id'=>0,'uuid'=>'4','category_code'=>'FEATURE','title'=>'虛擬社區','intro'=>'交流和參與組織活動的線上平台。讓志願者、支持者和參與者能夠連結起來，分享資源、經驗和想法。','tags'=>'["學習","交流"]','url'=>'#','thumbnail'=>'/features/4_community.png','user_id'=>1,'public'=>0,'published'=>0,'sequence'=>0],
+            ['organization_id'=>11,'uuid'=>'11111111','category_code'=>'FEATURE','title'=>'新聞與活動','intro'=>'新聞部分是用來發布組織的最新消息和事件，向公眾展示其在社會和環境領域中所做的工作，並提高對其使命的認識和理解。 ','tags'=>'["通告"]','url'=>'/','thumbnail'=>'/features/1_news_events.png','user_id'=>1,'public'=>0,'published'=>1,'sequence'=>0],
+            ['organization_id'=>11,'uuid'=>'22222222','category_code'=>'FEATURE','title'=>'表格及報名','intro'=>'包括各種類型的表格和報名表，方便訪問者提交相關資訊並表達他們的參與意願。','tags'=>'["報名"]','url'=>'/forms','thumbnail'=>'/features/2_form_application.png','user_id'=>1,'public'=>0,'published'=>1,'sequence'=>0],
+            ['organization_id'=>11,'uuid'=>'33333333','category_code'=>'FEATURE','title'=>'學習興分享','intro'=>'提供教育資源、知識分享和學習機會的區域。提供有價值的學習內容，並促進知識交流和社群互動。','tags'=>'["學習","分享"]','url'=>'#','thumbnail'=>'/features/3_learn_share.png','user_id'=>1,'public'=>0,'published'=>1,'sequence'=>0],
+            ['organization_id'=>11,'uuid'=>'44444444','category_code'=>'FEATURE','title'=>'虛擬社區','intro'=>'交流和參與組織活動的線上平台。讓志願者、支持者和參與者能夠連結起來，分享資源、經驗和想法。','tags'=>'["學習","交流"]','url'=>'#','thumbnail'=>'/features/4_community.png','user_id'=>1,'public'=>0,'published'=>1,'sequence'=>0],
             ['organization_id'=>11,
                 'category_code'=>'NEWS',
                 'uuid'=>'55555555',
@@ -36,7 +36,8 @@ class ArticleSeeder extends Seeder
                 'thumbnail'=>'/features/4_community.png',
                 'user_id'=>1,
                 'public'=>0,
-                'published'=>1
+                'published'=>1,
+                'sequence'=>0
             ],
             ['organization_id'=>11,
             'category_code'=>'NEWS',
@@ -49,7 +50,8 @@ class ArticleSeeder extends Seeder
             'thumbnail'=>'',
             'user_id'=>1,
             'public'=>1,
-            'published'=>1
+            'published'=>1,
+            'sequence'=>0
         ]
 
             

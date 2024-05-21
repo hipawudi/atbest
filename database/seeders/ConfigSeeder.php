@@ -147,6 +147,10 @@ class ConfigSeeder extends Seeder
                         ]
                     }
                 ]'
+            ],
+            [
+                'organization_id' => 0, 'key' => 'template_options', 'value' =>
+                '[{"value":"gender","label":"Gender","template":[{"value":"M","label":"男"},{"value":"F","label":"女"}]}]'
             ]
         ];
         foreach ($data as $d) {
