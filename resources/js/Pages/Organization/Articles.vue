@@ -127,19 +127,14 @@
             <a-form-item :label="$t('published')" name="published">
               <a-switch
                 v-model:checked="modal.data.published"
-                :checkedValue="1"
-                :unCheckedValue="0"
                 @change="modal.data.public = 0"
               />
             </a-form-item>
+            {{ modal.data.published }}
           </a-col>
           <a-col class="pl-10" v-if="modal.data.published">
             <a-form-item :label="$t('public')" name="public">
-              <a-switch
-                v-model:checked="modal.data.public"
-                :checkedValue="1"
-                :unCheckedValue="0"
-              />
+              <a-switch v-model:checked="modal.data.public" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -284,7 +279,8 @@ export default {
     onDragEnd(event) {
       //未知點做
       this.articles.data.forEach((element, idx) => {
-        element.sequence = idx + 1;
+        element.sequence =
+          idx + 1 + this.pagination.pageSize * (this.pagination.current - 1);
       });
     },
     createRecord() {
